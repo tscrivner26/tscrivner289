@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometric Sprint ©️</title>
+    <style>
+        body { margin: 0; overflow: hidden; font-family: Arial, sans-serif; background: #282c34; color: #61dafb; }
+        canvas { display: block; background: #000; }
+        #score { position: absolute; top: 10px; left: 10px; font-size: 24px; }
+        #pauseButton, #resetButton { position: absolute; top: 10px; right: 10px; font-size: 24px; background: #61dafb; color: #282c34; border: none; padding: 10px; cursor: pointer; }
+        #resetButton { right: 100px; }
+        #pauseUI { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 36px; background: rgba(0, 0, 0, 0.8); padding: 20px; border-radius: 10px; }
+        #termsPopup { 
+            display: none; 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            width: 80%; 
+            max-width: 600px; 
+            background: #fff; 
+            color: #000; 
+            padding: 20px; 
+            border-radius: 10px; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
+            max-height: 80vh; 
+            overflow-y: auto; /* Make the entire popup scrollable */
+        }
+        #introContent, #termsContent, #privacyContent {
+            max-height: 60vh; /* Height of each section */
+            overflow-y: auto; /* Enable scrolling within each section */
+            padding-right: 15px; /* Space for scrollbar */
+            box-sizing: content-box; /* Adjust box model to fit padding */
+        }
+        #introContent { margin-bottom: 20px; }
+        #termsContent { border-bottom: 2px solid #61dafb; margin-bottom: 20px; }
+        #privacyContent { margin-top: 20px; }
+        #termsPopup h1 { font-size: 24px; margin-bottom: 20px; }
+        #termsPopup h2 { font-size: 20px; margin-bottom: 10px; }
+        #termsPopup p, #termsPopup li { font-size: 16px; margin-bottom: 20px; }
+        #termsPopup button { font-size: 18px; padding: 10px 20px; margin: 10px; cursor: pointer; border: none; border-radius: 5px; }
+        #acceptButton { background: #28a745; color: #fff; }
+        #denyButton { background: #dc3545; color: #fff; }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <div id="score">Score: 0</div>
+    <button id="pauseButton">Pause</button>
+    <button id="resetButton">Reset</button>
+    <div id="pauseUI">Game Paused</div>
+    <div id="termsPopup">
+        <div id="introContent">
+            <h2>Disclaimer</h2>
+            <p>In order to proceed with the use of this service, it is imperative that you thoroughly read, understand, and accept both the Terms and Conditions and the Privacy Policy. Your continued use of the service constitutes your explicit agreement to be bound by the provisions set forth in these documents. Failure to review or acknowledge these terms and policies will preclude you from accessing or utilizing the service, as acceptance thereof is a mandatory prerequisite for engagement. The Terms and Conditions and Privacy Policy are integral to the agreement governing your use of the service, and your consent to these documents is deemed to be a condition precedent to the provision of any further access or use of the service.</p>
+        </div>
+        <div id="termsContent">
+            <h1>Terms and Conditions</h1>
+            <p>Welcome to Geometric Sprint. By accessing, installing, or using the Geometric Sprint game (hereinafter referred to as the "Game"), you (hereinafter referred to as the "End User") agree to be bound by and comply with the following Terms and Conditions (hereinafter referred to as the "Agreement"). Please read this Agreement carefully before using the Game. If you do not agree to these terms, you must refrain from accessing or using the Game.</p>
+            <p><strong>1. Acceptance of Terms</strong><br>By accessing, installing, or utilizing the Game, you acknowledge that you have read, understood, and agree to be legally bound by this Agreement. This Agreement constitutes a legally binding contract between you and the creator of the Game (hereinafter referred to as the "Creator"). Your continued use of the Game constitutes your acceptance of this Agreement, including any amendments or modifications thereto.</p>
+            <p><strong>2. Limitation of Liability</strong><br>The Creator shall not be held liable or responsible for any disciplinary actions, sanctions, or repercussions that may be imposed by educational institutions, employers, or any other third parties as a result of the End User’s engagement with or use of the Game. The End User acknowledges and agrees that it is their sole responsibility to ensure that their use of the Game complies with any applicable institutional policies, regulations, or codes of conduct.</p>
+            <p><strong>3. Waiver of Legal Rights</strong><br>By accessing or using the Game, the End User irrevocably waives any and all rights to initiate, pursue, or sustain any legal actions, including but not limited to lawsuits, claims for damages, or legal proceedings against the Creator, arising from or in connection with the End User's use of the Game. This waiver encompasses claims for personal injury, property damage, financial loss, or any other form of damages or legal recourse, whether direct or indirect.</p>
+            <p><strong>4. Prohibition of Theft, Damage, and Blasphemy</strong><br>The Creator does not endorse or permit any actions involving theft, vandalism, or blasphemy against the Game, its name, or the Creator. While such actions are not deemed to constitute a violation of this Agreement in terms of liability to the Creator, the End User remains fully responsible for any instances of theft, damage, defamation, or derogatory actions directed towards the Game, its name, or the Creator. The Creator shall bear no liability for any losses, damages, or consequences resulting from such actions.</p>
+            <p><strong>5. Indemnification</strong><br>The End User agrees to indemnify, defend, and hold harmless the Creator, including its affiliates, officers, directors, employees, and agents, from and against any and all claims, liabilities, damages, losses, and expenses, including but not limited to reasonable attorneys' fees and costs, arising out of or in connection with the End User's use of the Game. This indemnity obligation includes but is not limited to any claims arising from violations of this Agreement or any unlawful or prohibited conduct.</p>
+            <p><strong>6. Ethical and Virtuous Use</strong><br>The End User agrees to use the Game and its content in a manner that is consistent with and upholds Christian virtues and ethical standards. The Game shall be used in a manner that promotes respect, compassion, and positive values aligned with the teachings of Christianity. Any use of the Game that contravenes these principles or engages in behavior contrary to the upliftment of God’s name and Christian virtues is strictly prohibited.</p>
+            <p><strong>7. Modifications to Terms</strong><br>The Creator reserves the unilateral right to amend, modify, or update this Agreement at any time, with or without prior notice to the End User. Any such modifications will become effective immediately upon posting on the Game’s website or through other appropriate communication channels. The End User’s continued use of the Game following any such modifications constitutes acceptance of the revised Agreement.</p>
+            <p><strong>8. Severability</strong><br>Should any provision of this Agreement be found to be invalid, illegal, or unenforceable by a court of competent jurisdiction, such provision shall be deemed severed from this Agreement, and the remaining provisions shall continue in full force and effect. The invalidity or unenforceability of any provision shall not affect the validity or enforceability of the remaining provisions.</p>
+            <p><strong>9. Entire Agreement</strong><br>This Agreement constitutes the entire agreement between the End User and the Creator regarding the use of the Game and supersedes all prior agreements and understandings, whether written or oral, concerning the subject matter hereof.</p>
+            <p><strong>10. No Waiver</strong><br>No failure or delay by the Creator in exercising any right, power, or privilege under this Agreement shall operate as a waiver thereof, nor shall any single or partial exercise of any right, power, or privilege preclude any other or further exercise of any other right, power, or privilege.</p>
+            <p><strong>11. Governing Law</strong><br>This Agreement shall be governed by and construed in accordance with the laws of the State of Georgia, United States of America, without regard to its conflict of laws principles.</p>
+        </div>
+        <div id="privacyContent">
+            <h1>Privacy Policy</h1>
+            <p>This Privacy Policy (hereinafter referred to as the "Policy") explains how the creator of the Geometric Sprint game (hereinafter referred to as the "Creator") collects, uses, and protects the personal information and data of users (hereinafter referred to as "End Users") of the Game. By accessing, installing, or using the Game, you agree to the terms outlined in this Policy.</p>
+            <p><strong>1. Introduction</strong><br><strong>1.1 Overview</strong><br>The Creator of the Game reserves the right to collect, store, and utilize any and all data associated with the End User's use of the Game. This includes, but is not limited to, information about the End User's device, interactions with the Game, and any other data that may be collected during usage. This Policy outlines the types of data collected, the purposes for which it is used, and the circumstances under which it may be disclosed to third parties.<br><strong>1.2 Scope of Policy</strong><br>This Policy applies to all data collected through the Game and any associated services. It does not apply to third-party websites or services that may be linked to or integrated with the Game, which are governed by their own privacy policies.</p>
+            <p><strong>2. Collection of Data</strong><br><strong>2.1 Types of Data Collected</strong><br>The Creator may collect a wide range of data from the End User’s device, including but not limited to:<br>Device Information: This encompasses IP addresses, MAC addresses, device descriptions, unique device identifiers, and details regarding device configuration and specifications.<br>Screen Images and Screen Activity: Data related to visual outputs from the End User’s device, including screenshots, screen recordings, and other forms of visual data.<br>File Information: Files and content stored on the End User’s device, including documents, images, and other digital files.<br>Usage Data: Information regarding the End User’s interactions with the Game, including usage statistics, performance metrics, and system logs.<br><strong>2.2 Methods of Data Collection</strong><br>Data may be collected through various means, including but not limited to:<br>Direct Input: Information provided directly by the End User through interactions with the Game.<br>Automated Technologies: Data collected automatically through the use of cookies, web beacons, and similar technologies.<br>Third-Party Services: Data collected through integrations with third-party services or platforms.</p>
+            <p><strong>3. Use of Data</strong><br><strong>3.1 Operational Use</strong><br>The Creator may use collected data to:<br>Maintain and Improve the Game: To ensure the proper functioning of the Game, address technical issues, and enhance the overall user experience.<br>Analyze Performance: To analyze usage patterns, diagnose problems, and improve the Game’s performance and features.<br><strong>3.2 Marketing and Advertising</strong><br>The Creator may use data to:<br>Develop Targeted Advertising: To deliver personalized ads and promotional content based on the End User’s interests and usage patterns.<br>Conduct Market Research: To understand user preferences and trends to better tailor the Game to its audience.<br><strong>3.3 Security and Compliance</strong><br>Data may be used to:<br>Protect Against Fraud: To monitor and prevent fraudulent activities and security threats.<br>Ensure Legal Compliance: To comply with applicable laws, regulations, and legal processes, including responding to requests from law enforcement or regulatory authorities.</p>
+            <p><strong>4. Disclosure of Data</strong><br><strong>4.1 Affiliates and Partners</strong><br>The Creator may disclose data to:<br>Affiliates: Entities that are under common control or ownership with the Creator, for operational, analytical, or marketing purposes.<br>Third-Party Service Providers: Vendors and service providers that assist in the operation, maintenance, or enhancement of the Game.<br><strong>4.2 Legal and Regulatory Requirements</strong><br>The Creator may disclose data to:<br>Legal Authorities: To comply with legal obligations, respond to legal processes, or protect the rights, property, or safety of the Creator, its users, or others.<br>Business Transactions: In connection with a merger, acquisition, or sale of assets, where data may be transferred as part of the transaction.<br><strong>4.3 Business Operations</strong><br>Data may be disclosed as necessary for:<br>Administrative Purposes: To facilitate internal operations, including billing, account management, and customer support.<br>Service Enhancements: To improve and optimize the Game based on data-driven insights.</p>
+            <p><strong>5. Data Security</strong><br><strong>5.1 Security Measures</strong><br>The Creator will implement commercially reasonable measures to protect the collected data from unauthorized access, disclosure, alteration, or destruction. These measures include:<br>Encryption: Use of encryption technologies to safeguard data during transmission and storage.<br>Access Controls: Restricting access to data to authorized personnel only.<br><strong>5.2 Limitations of Security</strong><br>While the Creator strives to protect data, no security system is impenetrable. The Creator cannot guarantee absolute security and shall not be liable for any breaches of data security.</p>
+            <p><strong>6. Data Retention</strong><br><strong>6.1 Retention Period</strong><br>The Creator may retain collected data for:<br>Operational Purposes: As long as necessary to fulfill the purposes outlined in this Policy or as required by applicable laws and regulations.<br>Historical Records: For historical, statistical, or research purposes, as permitted by law.<br><strong>6.2 Deletion Requests</strong><br>End Users may not have the right to request deletion or access to their data beyond what is required by applicable laws. The Creator will retain data for as long as necessary to meet legal obligations and fulfill operational requirements.</p>
+            <p><strong>7. End User Rights</strong><br><strong>7.1 Consent and Acknowledgment</strong><br>By using the Game, the End User consents to the collection, use, and disclosure of their data as described in this Policy.<br><strong>7.2 Limitations on Access</strong><br>The End User acknowledges that their rights to access, correct, or delete data may be limited by applicable laws and regulations. The Creator will comply with applicable legal requirements regarding data access and correction.</p>
+            <p><strong>8. Changes to the Policy</strong><br><strong>8.1 Modification of Terms</strong><br>The Creator reserves the right to amend, modify, or update this Policy at any time. Changes will be effective immediately upon posting on the Game’s website or through other communication channels.<br><strong>8.2 Continued Use</strong><br>The End User’s continued use of the Game following any changes to this Policy constitutes acceptance of the revised terms.</p>
+            <p><strong>9. Severability</strong><br>If any provision of this Policy is found to be invalid, illegal, or unenforceable by a court of competent jurisdiction, such provision shall be severed from this Policy, and the remaining provisions shall continue in full force and effect. The invalidity or unenforceability of any provision shall not affect the validity or enforceability of the remaining provisions.</p>
+            <p><strong>10. Entire Agreement</strong><br>This Policy constitutes the entire agreement between the End User and the Creator concerning the collection, use, and disclosure of data in connection with the Game. It supersedes all prior agreements and understandings, whether written or oral, regarding the subject matter hereof.</p>
+            <p><strong>11. No Waiver</strong><br>No failure or delay by the Creator in exercising any right, power, or privilege under this Policy shall operate as a waiver thereof. Any single or partial exercise of any right, power, or privilege shall not preclude any other or further exercise of any other right, power, or privilege.</p>
+            <p><strong>12. Interpretation</strong><br>Headings are included for convenience only and shall not affect the interpretation of this Policy. The terms "including" and "includes" shall be deemed to be followed by the phrase "without limitation" unless expressly stated otherwise.</p>
+            <p><strong>BY ACCESSING, INSTALLING, OR USING THE GAME, YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREED TO THE TERMS OF THIS PRIVACY POLICY.</strong></p>
+        </div>
+        <button id="acceptButton">Accept</button>
+        <button id="denyButton">Deny</button>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
