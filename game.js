@@ -168,3 +168,5 @@ function acceptTerms(accepted) {
 
 openTermsPopup();
 gameLoop();
+
+
